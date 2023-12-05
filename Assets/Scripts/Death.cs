@@ -6,6 +6,7 @@ public class Death : Hurt
 {
     public override void onHit(){
         base.onHit(); 
-        GameObject.Find("Player").GetComponent<Player>().health -= 75; 
+        //GameObject.Find("Player").GetComponent<Player>().health = -1; 
+        GameObject.Find("GameManager").GetComponent<GameManager>().changeHealth(-1000);
     }
 }

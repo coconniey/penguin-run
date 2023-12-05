@@ -11,7 +11,7 @@ public class Player : MonoBehaviour
     public float jumpForce = 10f;
     public float gravity = 10f;
 
-    public int health = 100; 
+    //public int health = 100; 
 
  
 
@@ -31,7 +31,7 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        isAlive(); 
+        GameObject.Find("GameManager").GetComponent<GameManager>().isAlive();
         direction += Vector3.down * gravity * Time.deltaTime;
 
         if (character.isGrounded)
@@ -49,15 +49,16 @@ public class Player : MonoBehaviour
         character.Move(direction * Time.deltaTime);
     }
 
-    public void isAlive(){
-        if(health <= 0){
-            GameObject.Find("GameManager").GetComponent<GameManager>().GameOver();
-        } 
-    }
+    // public void isAlive(){
+    //     if(health <= 0){
+    //         GameObject.Find("GameManager").GetComponent<GameManager>().GameOver();
+    //     } 
+    // }
 
 
     private void OnTriggerEnter(Collider other)
     {
+        GameObject.Find("audio").GetComponent<audio>().hitSound(); 
         if(other.CompareTag("Angry")){
             other.gameObject.GetComponent<Angry>().onHit(); 
         }

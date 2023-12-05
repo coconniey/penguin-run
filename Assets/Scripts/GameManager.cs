@@ -10,15 +10,34 @@ public class GameManager : MonoBehaviour
         get; 
         private set;
     }
-    public float initialGameSpeed = 1f; 
-    public float deltaSpeed = 0.1f;
+    private float initialGameSpeed = 1f; 
+    private float deltaSpeed = 0.1f;
     private Player player;
     public float score = 0f;
+    public int health = 0; 
     private BunnieMaker BunnieMaker;
     public TextMeshProUGUI scoreText; 
     public float gameSpeed{
         get; 
         private set; 
+    }
+    public int getHealth(){
+        return health; 
+    }
+    public void changeHealth(int diff){
+        health += diff; 
+        if(health > 100){
+            health = 100; 
+        }
+        isAlive(); 
+    }
+    public bool isAlive(){
+        if(health <= 0){
+            GameObject.Find("audio").GetComponent<audio>().deathSound();
+            NewGame(); 
+            return false;
+        }
+        return true; 
     }
     private void Awake(){
         if (Instance == null) {
@@ -43,9 +62,10 @@ public class GameManager : MonoBehaviour
         score = 0;
         gameSpeed = initialGameSpeed;
         Time.timeScale = 1;
-        GameObject.Find("run").GetComponent<AudioSource>().mute = false; 
+        GameObject.Find("audio").GetComponent<audio>().mute1(false); 
         enabled = true;
-        GameObject.Find("Player").GetComponent<Player>().health = 100; 
+        //GameObject.Find("Player").GetComponent<Player>().health = 100; 
+        health = 100; 
     }
 
     public void GameOver()
@@ -54,15 +74,17 @@ public class GameManager : MonoBehaviour
         foreach (var Bunnie in bunnies) {
             Destroy(Bunnie.gameObject);
         }
-        GameObject.Find("run").GetComponent<AudioSource>().mute = true; 
+        GameObject.Find("audio").GetComponent<audio>().mute1(true); 
         GameObject.Find("BunnieMaker").active = false; 
         Time.timeScale = 0; 
         gameSpeed = 0; 
+        Invoke("NewGame", 2);
     }
 
     private void Update(){
         gameSpeed += deltaSpeed * Time.deltaTime; 
         score += gameSpeed * Time.deltaTime; 
         scoreText.text = Mathf.FloorToInt(score).ToString("D5"); 
+        GameObject.Find("health").GetComponent<Transform>().position = new Vector3(-(100-health)/5, 5, 0f);
     }
 }

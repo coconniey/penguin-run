@@ -6,7 +6,7 @@ public class BunnieMaker : MonoBehaviour
 {
     public Bunnie[] bunnies;
     private void OnEnable(){
-        Invoke(nameof(Make), Random.Range(0.5f, 3f));
+        Invoke("Make", Random.Range(0.5f, 3f));
     }
     private void OnDisable(){
         CancelInvoke();
@@ -32,7 +32,7 @@ public class BunnieMaker : MonoBehaviour
             }
             spawnChance -= obj.spawnChance;
         }
-        Invoke(nameof(Make), Random.Range(0.5f, 3f));
+        Invoke("Make", Random.Range(0.5f, 3f));
     }
 
 }
